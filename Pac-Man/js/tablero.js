@@ -24,7 +24,7 @@ tablero = {
                 this.metaX = FILAS-1;
                 this.metaY = COLUMNAS-1;
                 this.casillas[this.metaX][this.metaY] = MARCASALIDA;
-            }while(this.mapaValido());
+            }while(!this.mapaValido());
         }
         mapaValido(){
             let valido = true;
