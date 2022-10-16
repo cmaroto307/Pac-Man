@@ -7,6 +7,10 @@ tablero = {
             for(let i=0; i<FILAS; i++) {
                 this.casillas[i] = new Array(COLUMNAS);
             }
+            this.copiaTablero = new Array(FILAS);
+            for(let i=0; i<FILAS; i++) {
+                this.copiaTablero[i] = new Array(COLUMNAS);
+            }
             this.generarMapa();
             this.mostrarMapa();
         }
@@ -31,15 +35,44 @@ tablero = {
             this.fantasma = new personaje.Personaje(this.FANTASMAINIX,this.FANTASMAINIY);
         }
         mapaValido(){
-            let valido = true;
-
+            let resultado = true;
             if((this.JUGADORINIX==this.FANTASMAINIX && this.JUGADORINIY==this.FANTASMAINIY) || 
-                (this.JUGADORINIX==this.METAX && this.JUGADORINIY==this.METAY)){
-                valido = false;
+               (this.JUGADORINIX==this.METAX && this.JUGADORINIY==this.METAY)){
+                resultado = false;
             }
-            // COMPROBAR QUE HAY CAMINO DEL JUGADOR A LA META Y DEL FANTASMA AL JUGADOR
-
-            return valido;
+            if(resultado){
+                this.copiarTablero();
+                resultado = this.hayCamino(this.JUGADORINIX, this.JUGADORINIY, this.METAX, this.METAY);
+                if(resultado){
+                    this.copiarTablero();
+                    resultado = this.hayCamino(this.FANTASMAINIX, this.FANTASMAINIY, this.JUGADORINIX, this.JUGADORINIY);
+                }
+            }
+            return resultado;
+        }
+        copiarTablero(){
+            for(let i=0; i<FILAS; i++){
+                for(let j=0; j<COLUMNAS; j++){
+                    this.copiaTablero[i][j] = this.casillas[i][j];
+                }
+            }
+        }
+        hayCamino(origenX, origenY, destinoX, destinoY){
+            let resultado = false;
+            if(origenX>=0 && origenX<FILAS && origenY>=0 && origenY<COLUMNAS && 
+                this.copiaTablero[origenX][origenY]!=VALORMURO && this.copiaTablero[origenX][origenY]!=VALOREXPLORADO){
+                if(origenX==destinoX && origenY==destinoY){
+                    resultado = true;
+                }
+                else{
+                    this.copiaTablero[origenX][origenY] = VALOREXPLORADO;
+                    if(this.hayCamino(origenX-1, origenY, destinoX, destinoY) || this.hayCamino(origenX+1, origenY, destinoX, destinoY) ||
+                       this.hayCamino(origenX, origenY-1, destinoX, destinoY) || this.hayCamino(origenX, origenY+1, destinoX, destinoY)){
+                        resultado = true;
+                    }
+                }
+            }
+            return resultado;
         }
         mostrarMapa(){
             this.tableroMostrado.innerHTML = "";
@@ -75,18 +108,10 @@ tablero = {
             }
         }
         jugadorAtrapado(){
-            let atrapado = false;
-            if(this.jugador.posicionX==this.fantasma.posicionX && this.jugador.posicionY==this.fantasma.posicionY){
-                atrapado = true;
-            }
-            return atrapado;
+            return this.jugador.posicionX==this.fantasma.posicionX && this.jugador.posicionY==this.fantasma.posicionY;
         }
         salidaEncontrada(){
-            let encontrada = false;
-            if(this.jugador.posicionX==this.METAX && this.jugador.posicionY==this.METAY){
-                encontrada = true;
-            }
-            return encontrada;
+            return this.jugador.posicionX==this.METAX && this.jugador.posicionY==this.METAY;
         }
         moverJugadorArriba(){
             if(this.jugador.posicionX>0 && this.casillas[this.jugador.posicionX-1][this.jugador.posicionY]!=VALORMURO){
