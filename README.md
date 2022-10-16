@@ -1,5 +1,4 @@
 # Pac-Man-sincrono
 
 To do:
-  - Comprobar que el mapa sea válido
-  - Revisar y optimizar código
+  - Comprobar que hay camino del jugador a la meta y del fantasma al jugador
