@@ -19,7 +19,7 @@ pacman = {
         eventoTecladoDown(event){
             if(!this.finalPartida && !this.teclaPulsada){
                 this.teclaPulsada = true;
-                let teclaCorrecta;
+                let teclaCorrecta = false;
                 let keyValue = event.key;
                 switch(keyValue){
                     case 'w':
@@ -40,21 +40,27 @@ pacman = {
                     break;
                 }
                 if(teclaCorrecta){
-                    this.nuevoTablero.moverFantasma();
+                    this.comprobarFinal();
+                    if(!this.finalPartida){
+                        this.nuevoTablero.moverFantasma();
+                        this.comprobarFinal();
+                    }
                     this.nuevoTablero.mostrarMapa();
-                    if(this.nuevoTablero.jugadorAtrapado()){
-                        this.mensajeMostrado.textContent = "¡El fantasma te ha atrapado!";
-                        this.finalPartida = true;
-                    }
-                    else if(this.nuevoTablero.salidaEncontrada()){
-                        this.mensajeMostrado.textContent = "¡Has ganado!";
-                        this.finalPartida = true;
-                    }
                 }
             }
         }
         eventoTecladoUp(event){
             this.teclaPulsada = false;
+        }
+        comprobarFinal(){
+            if(this.nuevoTablero.jugadorAtrapado()){
+                this.mensajeMostrado.textContent = "¡El fantasma te ha atrapado!";
+                this.finalPartida = true;
+            }
+            else if(this.nuevoTablero.salidaEncontrada()){
+                this.mensajeMostrado.textContent = "¡Has ganado!";
+                this.finalPartida = true;
+            }
         }
     }
 }

@@ -1,8 +1,8 @@
 var FILAS = 5;
 var COLUMNAS = 5;
 var MARCAJUGADOR = 'P';
-var MARCAFANTASMA = 'A';
-var MARCASALIDA = 'X';
+var MARCAFANTASMA = 'F';
+var MARCAMETA = 'X';
 var VALORMURO = 1;
 var VALORLIBRE = 0;
 

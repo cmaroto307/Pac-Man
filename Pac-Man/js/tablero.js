@@ -2,32 +2,42 @@ var tablero = tablero || {};
 tablero = {
     Tablero:class{
         constructor(elemTablero){
-            this.tableroMostrado = elemTablero,
+            this.tableroMostrado = elemTablero;
             this.casillas = new Array(FILAS);
             for(let i=0; i<FILAS; i++) {
                 this.casillas[i] = new Array(COLUMNAS);
             }
-            this.jugador = new personaje.Personaje(0,0);
-            this.fantasma = new personaje.Personaje(Math.floor(FILAS/2),Math.floor(COLUMNAS/2));
             this.generarMapa();
             this.mostrarMapa();
         }
         generarMapa(){
             do{
+                this.JUGADORINIX = Math.floor(Math.random() * FILAS);
+                this.JUGADORINIY = Math.floor(Math.random() * COLUMNAS);
+                this.FANTASMAINIX = Math.floor(Math.random() * FILAS);
+                this.FANTASMAINIY = Math.floor(Math.random() * COLUMNAS);
+                this.METAX = Math.floor(Math.random() * FILAS);
+                this.METAY = Math.floor(Math.random() * COLUMNAS);
                 for(let i=0; i<FILAS; i++){
                     for(let j=0; j<COLUMNAS; j++){
                         this.casillas[i][j] = Math.floor(Math.random() * 2);
                     }
                 }
-                this.casillas[this.jugador.posicionX][this.jugador.posicionY] = 0;
-                this.casillas[this.fantasma.posicionX][this.fantasma.posicionY] = 0;
-                this.metaX = FILAS-1;
-                this.metaY = COLUMNAS-1;
-                this.casillas[this.metaX][this.metaY] = MARCASALIDA;
+                this.casillas[this.JUGADORINIX][this.JUGADORINIY] = VALORLIBRE;
+                this.casillas[this.FANTASMAINIX][this.FANTASMAINIY] = VALORLIBRE;
+                this.casillas[this.METAX][this.METAY] = VALORLIBRE;
             }while(!this.mapaValido());
+            this.jugador = new personaje.Personaje(this.JUGADORINIX,this.JUGADORINIY);
+            this.fantasma = new personaje.Personaje(this.FANTASMAINIX,this.FANTASMAINIY);
         }
         mapaValido(){
             let valido = true;
+
+            if((this.JUGADORINIX==this.FANTASMAINIX && this.JUGADORINIY==this.FANTASMAINIY) || 
+                (this.JUGADORINIX==this.METAX && this.JUGADORINIY==this.METAY)){
+                valido = false;
+            }
+            // COMPROBAR QUE HAY CAMINO DEL JUGADOR A LA META Y DEL FANTASMA AL JUGADOR
 
             return valido;
         }
@@ -44,9 +54,9 @@ tablero = {
                         elem.setAttribute("class", "casilla jugador");
                         elem.appendChild(document.createTextNode(MARCAJUGADOR));
                     }
-                    else if(i==this.metaX && j==this.metaY){
+                    else if(i==this.METAX && j==this.METAY){
                         elem.setAttribute("class", "casilla meta");
-                        elem.appendChild(document.createTextNode(MARCASALIDA));
+                        elem.appendChild(document.createTextNode(MARCAMETA));
                     }
                     else{
                         if(this.casillas[i][j]==VALORMURO){
@@ -73,32 +83,28 @@ tablero = {
         }
         salidaEncontrada(){
             let encontrada = false;
-            if(this.jugador.posicionX==this.metaX && this.jugador.posicionY==this.metaY){
+            if(this.jugador.posicionX==this.METAX && this.jugador.posicionY==this.METAY){
                 encontrada = true;
             }
             return encontrada;
         }
         moverJugadorArriba(){
             if(this.jugador.posicionX>0 && this.casillas[this.jugador.posicionX-1][this.jugador.posicionY]!=VALORMURO){
-                this.casillas[this.jugador.posicionX][this.jugador.posicionY] = VALORLIBRE;
                 this.jugador.moverArriba();
             }
         }
         moverJugadorIzquierda(){
             if(this.jugador.posicionY>0 && this.casillas[this.jugador.posicionX][this.jugador.posicionY-1]!=VALORMURO){
-                this.casillas[this.jugador.posicionX][this.jugador.posicionY] = VALORLIBRE;
                 this.jugador.moverIzquierda();
             }
         }
         moverJugadorAbajo(){
-            if(this.jugador.posicionX<this.metaX && this.casillas[this.jugador.posicionX+1][this.jugador.posicionY]!=VALORMURO){
-                this.casillas[this.jugador.posicionX][this.jugador.posicionY] = VALORLIBRE;
+            if(this.jugador.posicionX<FILAS-1 && this.casillas[this.jugador.posicionX+1][this.jugador.posicionY]!=VALORMURO){
                 this.jugador.moverAbajo();
             }
         }
         moverJugadorDerecha(){
-            if(this.jugador.posicionY<this.metaY && this.casillas[this.jugador.posicionX][this.jugador.posicionY+1]!=VALORMURO){
-                this.casillas[this.jugador.posicionX][this.jugador.posicionY] = VALORLIBRE;
+            if(this.jugador.posicionY<COLUMNAS-1 && this.casillas[this.jugador.posicionX][this.jugador.posicionY+1]!=VALORMURO){
                 this.jugador.moverDerecha();
             }
         }
@@ -125,7 +131,6 @@ tablero = {
         moverFantasmaArriba(){
             let puede = false;
             if(this.fantasma.posicionX>0 && this.casillas[this.fantasma.posicionX-1][this.fantasma.posicionY]!=VALORMURO){
-                this.casillas[this.fantasma.posicionX][this.fantasma.posicionY] = VALORLIBRE;
                 this.fantasma.moverArriba();
                 puede = true;
             }
@@ -134,7 +139,6 @@ tablero = {
         moverFantasmaIzquierda(){
             let puede = false;
             if(this.fantasma.posicionY>0 && this.casillas[this.fantasma.posicionX][this.fantasma.posicionY-1]!=VALORMURO){
-                this.casillas[this.fantasma.posicionX][this.fantasma.posicionY] = VALORLIBRE;
                 this.fantasma.moverIzquierda();
                 puede = true;
             }
@@ -142,8 +146,7 @@ tablero = {
         }
         moverFantasmaAbajo(){
             let puede = false;
-            if(this.fantasma.posicionX<this.metaX && this.casillas[this.fantasma.posicionX+1][this.fantasma.posicionY]!=VALORMURO){
-                this.casillas[this.fantasma.posicionX][this.fantasma.posicionY] = VALORLIBRE;
+            if(this.fantasma.posicionX<FILAS-1 && this.casillas[this.fantasma.posicionX+1][this.fantasma.posicionY]!=VALORMURO){
                 this.fantasma.moverAbajo();
                 puede = true;
             }
@@ -151,8 +154,7 @@ tablero = {
         }
         moverFantasmaDerecha(){
             let puede = false;
-            if(this.fantasma.posicionY<this.metaY && this.casillas[this.fantasma.posicionX][this.fantasma.posicionY+1]!=VALORMURO){
-                this.casillas[this.fantasma.posicionX][this.fantasma.posicionY] = VALORLIBRE;
+            if(this.fantasma.posicionY<COLUMNAS-1 && this.casillas[this.fantasma.posicionX][this.fantasma.posicionY+1]!=VALORMURO){
                 this.fantasma.moverDerecha();
                 puede = true;
             }
