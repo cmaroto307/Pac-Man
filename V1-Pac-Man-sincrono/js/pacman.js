@@ -6,11 +6,11 @@ pacman = {
             this.mensajeMostrado = document.getElementById(strMensaje);
             this.mensajeMostrado.textContent = "Pulsa Inicio para empezar una partida";
             let botonIniPartida = document.getElementById(strBotonIniPartida);
+            this.teclaPulsada = false;
             botonIniPartida.onclick = () => {this.iniciarPartida();};
         }
         iniciarPartida(){
             this.finalPartida = false;
-            this.teclaPulsada = false;
             this.nuevoTablero = new tablero.Tablero(this.tableroMostrado);
             this.mensajeMostrado.textContent = "Encuentra la salida evitando al fantasma. Controles->(W, A, S, D)";
             document.addEventListener('keydown', (event) => {this.eventoTecladoDown(event);});
