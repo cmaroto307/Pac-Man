@@ -15,6 +15,7 @@ pacman = {
             this.mensajeMostrado.textContent = "Encuentra la salida evitando al fantasma. Controles->(W, A, S, D)";
             document.addEventListener('keydown', (event) => {this.eventoTecladoDown(event);});
             document.addEventListener('keyup', (event) => {this.eventoTecladoUp(event);});
+            clearInterval(this.hilo);
             this.hilo = setInterval(()=>this.iniciarMovimientoFantasma(), 500);
         }
         eventoTecladoDown(event){
