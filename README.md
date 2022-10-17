@@ -1,4 +1,4 @@
-# Pac-Man-sincrono
+# Pac-Man
 
 V1-Pac-Man-sincrono: Ejercicio Terminado
 
