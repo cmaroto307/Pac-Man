@@ -22,7 +22,11 @@
     background-repeat: no-repeat;
 }
 .muro{
-    background-color: rgb(29, 13, 172);
+    background-color: rgb(0, 0, 0);
+    background-image: url("./img/Wall.png");
+    background-position: center center;
+    background-size: cover;
+    background-repeat: no-repeat;
 }
 .libre{
     background-color: rgb(0, 0, 0);
