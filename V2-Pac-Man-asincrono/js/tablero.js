@@ -3,6 +3,12 @@ tablero = {
     Tablero:class{
         constructor(elemTablero){
             this.tableroMostrado = elemTablero;
+            this.JUGADORINIX = 0;
+            this.JUGADORINIY = 0;
+            this.FANTASMAINIX = Math.floor(FILAS/2);
+            this.FANTASMAINIY = Math.floor(COLUMNAS/2);
+            this.METAX = FILAS-1;
+            this.METAY = COLUMNAS-1;
             this.casillas = new Array(FILAS);
             for(let i=0; i<FILAS; i++) {
                 this.casillas[i] = new Array(COLUMNAS);
@@ -16,12 +22,6 @@ tablero = {
         }
         generarMapa(){
             do{
-                this.JUGADORINIX = 0;
-                this.JUGADORINIY = 0;
-                this.FANTASMAINIX = Math.floor(FILAS/2);
-                this.FANTASMAINIY = Math.floor(COLUMNAS/2);
-                this.METAX = FILAS-1;
-                this.METAY = COLUMNAS-1;
                 for(let i=0; i<FILAS; i++){
                     for(let j=0; j<COLUMNAS; j++){
                         this.casillas[i][j] = Math.floor(Math.random() * 2);
@@ -35,18 +35,11 @@ tablero = {
             this.fantasma = new personaje.Personaje(this.FANTASMAINIX,this.FANTASMAINIY);
         }
         mapaValido(){
-            let resultado = true;
-            if((this.JUGADORINIX==this.FANTASMAINIX && this.JUGADORINIY==this.FANTASMAINIY) || 
-               (this.JUGADORINIX==this.METAX && this.JUGADORINIY==this.METAY)){
-                resultado = false;
-            }
+            this.copiarTablero();
+            let resultado = this.hayCamino(this.JUGADORINIX, this.JUGADORINIY, this.METAX, this.METAY);
             if(resultado){
                 this.copiarTablero();
-                resultado = this.hayCamino(this.JUGADORINIX, this.JUGADORINIY, this.METAX, this.METAY);
-                if(resultado){
-                    this.copiarTablero();
-                    resultado = this.hayCamino(this.FANTASMAINIX, this.FANTASMAINIY, this.JUGADORINIX, this.JUGADORINIY);
-                }
+                resultado = this.hayCamino(this.FANTASMAINIX, this.FANTASMAINIY, this.JUGADORINIX, this.JUGADORINIY);
             }
             return resultado;
         }

@@ -6,17 +6,17 @@ pacman = {
             this.mensajeMostrado = document.getElementById(strMensaje);
             this.mensajeMostrado.textContent = "Pulsa Inicio para empezar una partida";
             let botonIniPartida = document.getElementById(strBotonIniPartida);
+            this.teclaPulsada = false;
             botonIniPartida.onclick = () => {this.iniciarPartida();};
         }
         iniciarPartida(){
             this.finalPartida = false;
-            this.teclaPulsada = false;
             this.nuevoTablero = new tablero.Tablero(this.tableroMostrado);
             this.mensajeMostrado.textContent = "Encuentra la salida evitando al fantasma. Controles->(W, A, S, D)";
             document.addEventListener('keydown', (event) => {this.eventoTecladoDown(event);});
             document.addEventListener('keyup', (event) => {this.eventoTecladoUp(event);});
-            clearInterval(this.hilo);
-            this.hilo = setInterval(()=>this.iniciarMovimientoFantasma(), 500);
+            clearInterval(this.hiloFantasma);
+            this.hiloFantasma = setInterval(()=>this.iniciarMovimientoFantasma(), 500);
         }
         eventoTecladoDown(event){
             if(!this.finalPartida && !this.teclaPulsada){
@@ -51,22 +51,20 @@ pacman = {
             this.teclaPulsada = false;
         }
         iniciarMovimientoFantasma(){
-            if(!this.finalPartida){
-                this.nuevoTablero.moverFantasma();
-                this.comprobarFinal();
-                this.nuevoTablero.mostrarMapa();
-            }
+            this.nuevoTablero.moverFantasma();
+            this.comprobarFinal();
+            this.nuevoTablero.mostrarMapa();
         }
         comprobarFinal(){
             if(this.nuevoTablero.jugadorAtrapado()){
                 this.mensajeMostrado.textContent = "¡El fantasma te ha atrapado!";
                 this.finalPartida = true;
-                clearInterval(this.hilo);
+                clearInterval(this.hiloFantasma);
             }
             else if(this.nuevoTablero.salidaEncontrada()){
                 this.mensajeMostrado.textContent = "¡Has ganado!";
                 this.finalPartida = true;
-                clearInterval(this.hilo);
+                clearInterval(this.hiloFantasma);
             }
         }
     }
