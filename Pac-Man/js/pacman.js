@@ -12,7 +12,7 @@ pacman = {
             this.finalPartida = false;
             this.teclaPulsada = false;
             this.nuevoTablero = new tablero.Tablero(this.tableroMostrado);
-            this.mensajeMostrado.textContent = "Encuentra la salida evitando al fantasma";
+            this.mensajeMostrado.textContent = "Encuentra la salida evitando al fantasma. Controles->(W, A, S, D)";
             document.addEventListener('keydown', (event) => {this.eventoTecladoDown(event);});
             document.addEventListener('keyup', (event) => {this.eventoTecladoUp(event);});
         }
@@ -20,7 +20,7 @@ pacman = {
             if(!this.finalPartida && !this.teclaPulsada){
                 this.teclaPulsada = true;
                 let teclaCorrecta = false;
-                let keyValue = event.key;
+                let keyValue = event.key.toLowerCase();
                 switch(keyValue){
                     case 'w':
                         this.nuevoTablero.moverJugadorArriba();

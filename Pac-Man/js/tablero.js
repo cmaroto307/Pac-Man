@@ -16,12 +16,12 @@ tablero = {
         }
         generarMapa(){
             do{
-                this.JUGADORINIX = Math.floor(Math.random() * FILAS);
-                this.JUGADORINIY = Math.floor(Math.random() * COLUMNAS);
-                this.FANTASMAINIX = Math.floor(Math.random() * FILAS);
-                this.FANTASMAINIY = Math.floor(Math.random() * COLUMNAS);
-                this.METAX = Math.floor(Math.random() * FILAS);
-                this.METAY = Math.floor(Math.random() * COLUMNAS);
+                this.JUGADORINIX = 0;
+                this.JUGADORINIY = 0;
+                this.FANTASMAINIX = Math.floor(FILAS/2);
+                this.FANTASMAINIY = Math.floor(COLUMNAS/2);
+                this.METAX = FILAS-1;
+                this.METAY = COLUMNAS-1;
                 for(let i=0; i<FILAS; i++){
                     for(let j=0; j<COLUMNAS; j++){
                         this.casillas[i][j] = Math.floor(Math.random() * 2);
@@ -81,24 +81,20 @@ tablero = {
                     let elem = document.createElement("div");
                     if(i==this.fantasma.posicionX && j==this.fantasma.posicionY){
                         elem.setAttribute("class", "casilla fantasma");
-                        elem.appendChild(document.createTextNode(MARCAFANTASMA));
                     }
                     else if(i==this.jugador.posicionX && j==this.jugador.posicionY){
                         elem.setAttribute("class", "casilla jugador");
-                        elem.appendChild(document.createTextNode(MARCAJUGADOR));
                     }
                     else if(i==this.METAX && j==this.METAY){
                         elem.setAttribute("class", "casilla meta");
-                        elem.appendChild(document.createTextNode(MARCAMETA));
                     }
                     else{
                         if(this.casillas[i][j]==VALORMURO){
                             elem.setAttribute("class", "casilla muro");
                         }
                         else if(this.casillas[i][j]==VALORLIBRE){
-                            elem.setAttribute("class", "casilla");
+                            elem.setAttribute("class", "casilla libre");
                         }
-                        elem.appendChild(document.createTextNode(this.casillas[i][j]));
                     }
                     this.tableroMostrado.appendChild(elem);
                 }
