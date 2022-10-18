@@ -12,7 +12,7 @@ pacman = {
         iniciarPartida(){
             this.finalPartida = false;
             this.nuevoTablero = new tablero.Tablero(this.tableroMostrado);
-            this.mensajeMostrado.textContent = "Encuentra la salida evitando a los fantasmas. Controles->(W, A, S, D)";
+            this.mensajeMostrado.textContent = "Encuentra la salida de los niveles evitando a los fantasmas. Controles->(W, A, S, D)";
             document.addEventListener('keydown', (event) => {this.eventoTecladoDown(event);});
             document.addEventListener('keyup', (event) => {this.eventoTecladoUp(event);});
             clearInterval(this.hiloFantasma);
