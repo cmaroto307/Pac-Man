@@ -4,8 +4,7 @@ V1-Pac-Man-sincrono: Ejercicio Terminado
 
 V2-Pac-Man-asincrono: Ejercicio Terminado
 
-V3-Pac-Man-multinivel:
-  - Crear subidas de los niveles
+V3-Pac-Man-multinivel: Ejercicio Terminado
 
 Ampliación:
   - Movimiento asincrono jugador
