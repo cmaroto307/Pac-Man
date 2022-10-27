@@ -1,0 +1,1 @@
+let nuevaPartida = new pacman.Pacman("idTablero", "idMensaje", "idBotonIniPartida");
